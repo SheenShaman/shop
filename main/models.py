@@ -8,29 +8,39 @@ class Category(models.Model):
     slug_name = models.CharField(max_length=100, verbose_name='Slug')
     image = models.ImageField(upload_to='category/', verbose_name='Изображение', **NULLABLE)
 
-    ############# parent = True/False #############
-
     def __str__(self):
-        return self.name
+        return f'{self.name} {self.image}'
 
     class Meta:
-        ############# вставить категория/подкатегория #############
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
-        verbose_name = 'категория'
-        verbose_name_plural = 'категории'
+
+class Subcategory(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Наименование')
+    slug_name = models.CharField(max_length=100, verbose_name='Slug')
+    image = models.ImageField(upload_to='category/', verbose_name='Изображение', **NULLABLE)
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
+
+    def __str__(self):
+        return f'{self.name} {self.image}'
+
+    class Meta:
+        verbose_name = 'Подкатегория'
+        verbose_name_plural = 'Подкатегории'
 
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование')
     slug_name = models.CharField(max_length=100, verbose_name='Slug')
-    image = models.ImageField(upload_to='category/', verbose_name='Изображение',
-                              **NULLABLE)  ############## как сделать в 3х размерах #############
+    ############## как сделать в 3х размерах #############
+    image = models.ImageField(upload_to='category/', verbose_name='Изображение', **NULLABLE)
     price = models.FloatField(verbose_name='Цена', **NULLABLE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
-    ############# Подкатегория??? #############
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, verbose_name='Подкатегория')
 
     def __str__(self):
-        return self.name
+        return f'{self.name} {self.image}'
 
     class Meta:
         verbose_name = 'Продукт'
