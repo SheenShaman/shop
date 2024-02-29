@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from main.models import Category, Subcategory, Product
+from main.models import Category, Product, Subcategory
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -23,6 +23,12 @@ class SubcategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('name', 'slug_name', 'category', 'subcategory', 'price', 'image_1', 'image_2', 'image_3')
+
+    @staticmethod
+    def get_category(obj):
+        return obj.subcategory.category.pk
