@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from main.models import Category, Subcategory, Product
+from main.models import Category, Product, Subcategory
 
 
 @admin.register(Category)
@@ -15,4 +15,4 @@ class SubcategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug_name', 'image', 'price', 'subcategory')
+    list_display = ('name', 'slug_name', 'image_1', 'image_2', 'image_3', 'price', 'subcategory')
