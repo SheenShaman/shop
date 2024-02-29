@@ -5,11 +5,11 @@ NULLABLE = {'null': True, 'blank': True}
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование')
-    slug_name = models.CharField(max_length=100, verbose_name='Slug')
+    slug_name = models.SlugField(max_length=100, unique=True)
     image = models.ImageField(upload_to='category/', verbose_name='Изображение', **NULLABLE)
 
     def __str__(self):
-        return f'{self.name} {self.image}'
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'Категория'
@@ -18,13 +18,13 @@ class Category(models.Model):
 
 class Subcategory(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование')
-    slug_name = models.CharField(max_length=100, verbose_name='Slug')
+    slug_name = models.SlugField(max_length=100, unique=True)
     image = models.ImageField(upload_to='category/', verbose_name='Изображение', **NULLABLE)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
 
     def __str__(self):
-        return f'{self.name} {self.image}'
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'Подкатегория'
@@ -33,14 +33,20 @@ class Subcategory(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование')
-    slug_name = models.CharField(max_length=100, verbose_name='Slug')
-    ############## как сделать в 3х размерах #############
-    image = models.ImageField(upload_to='category/', verbose_name='Изображение', **NULLABLE)
-    price = models.FloatField(verbose_name='Цена', **NULLABLE)
+    slug_name = models.SlugField(max_length=100, unique=True)
+    image_1 = models.ImageField(upload_to='category/', verbose_name='Изображение размера 1', **NULLABLE)
+    image_2 = models.ImageField(upload_to='category/', verbose_name='Изображение размера 2', **NULLABLE)
+    image_3 = models.ImageField(upload_to='category/', verbose_name='Изображение размера 3', **NULLABLE)
+    price = models.FloatField(verbose_name='Цена')
+
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, verbose_name='Подкатегория')
 
+    # def save(self, **kwargs):
+    #     self.category = self.subcategory.category
+    #     super().save(**kwargs)
+
     def __str__(self):
-        return f'{self.name} {self.image}'
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'Продукт'
